@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg: #080b12;
+  --electric: #3b82f6;
+  --electric-bright: #5b9bff;
+  --cyan: #22d3ee;
+  --violet: #8b7cf6;
+  --line: rgba(148, 170, 210, 0.12);
+  --mx: 50vw; /* mouse position, updated by useSpotlight */
+  --my: 30vh;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-ink-950 font-sans text-fg antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: rgba(59, 130, 246, 0.35);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--electric-bright);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8;
+  }
+  .glass {
+    background: linear-gradient(180deg, rgba(27, 36, 54, 0.55), rgba(12, 17, 27, 0.55));
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-fg-muted;
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(148, 170, 210, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 170, 210, 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .text-gradient {
+    background: linear-gradient(100deg, #e8edf6 10%, #9cc2ff 55%, #67e8f9 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hairline {
+    background: linear-gradient(90deg, transparent, rgba(91, 155, 255, 0.5), transparent);
+    height: 1px;
+  }
+}
+
+/* Mouse-following light, fixed behind content */
+.spotlight {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(600px circle at var(--mx) var(--my), rgba(59, 130, 246, 0.08), transparent 60%);
+}
+
+/* Card light that follows the cursor inside the card */
+.card-glow {
+  position: relative;
+  isolation: isolate;
+}
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(420px circle at var(--cx, 50%) var(--cy, 50%), rgba(91, 155, 255, 0.12), transparent 60%);
+}
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
